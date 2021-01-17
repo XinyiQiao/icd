@@ -1,0 +1,16 @@
+version: '3'
+
+volumes:
+  data_test: {}
+
+services:
+  icd:
+    build:
+      context: .
+      dockerfile: ./compose/icd/Dockerfile-test
+    environment:
+      - LC_ALL=C.UTF-8
+      - LANG=C.UTF-8
+    image: icd:test
+    volumes:
+      - data_test:/data

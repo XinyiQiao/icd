@@ -1,0 +1,19 @@
+version: '3'
+
+volumes:
+  data: {}
+
+services:
+  icd:
+    build:
+      context: .
+      dockerfile: ./compose/icd/Dockerfile
+    environment:
+      - LC_ALL=C.UTF-8
+      - LANG=C.UTF-8
+    #env-file:
+    #  - ./.envs/.production/.icd
+    image: icd
+    volumes:
+      - data:/data
+    #command: /start
