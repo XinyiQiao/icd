@@ -36,4 +36,7 @@ def process(input_dir):
     services = services[['HADM_ID','TRANSFERTIME','PREV_SERVICE','CURR_SERVICE']]
     admissions.join(services, how = "left", on = "HADM_ID")
 
+    # TRANSFERS
+    transfers = services[['HADM_ID','INTIME','OUTTIME','LOS']]
+    admissions.join(transfers, how = "left", on = "HADM_ID")
     return admissions
