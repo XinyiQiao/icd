@@ -13,30 +13,31 @@ def process(input_dir):
     icu = pd.read_csv(input_dir/"ICUSTAYS.csv")
     services = pd.read_csv(input_dir/"SERVICES.csv")
     transfers = pd.read_csv(input_dir/"TRANSGERS.csv")
+    # admissions = pd.read_csv(input_dir/"ADMISSIONS.csv", compression = 'gzip')
 
     # PROCSDURES_ICD
     procedures_icd.rename(columns={"ICD9_CODE":"ICD9_Procedures"})
     procedures_icd = procedures_icd[['HADM_ID','ICD9_Procedures']]
-    admissions.merge(procedures_icd, how = "left", on="HADM_ID")
+    admissions=admissions.merge(procedures_icd, how = "left", on="HADM_ID")
 
     # DIAGNOSES_ICD
     diagnoses_icd.rename(columns={"ICD9_CODE":"ICD9_Diagnoses"})
     diagnoses_icd = diagnoses_icd[['HADM_ID','ICD9_Diagnoses']]
-    admissions.merge(diagnoses_icd, how = "left", on="HADM_ID")
+    admissions=admissions.merge(diagnoses_icd, how = "left", on="HADM_ID")
     
     # PATIENTS
     patients = patients[['SUBJECT_ID','GENDER', 'DOB','DOD','DOD_HOSP']]
-    admissions.merge(patients, how = "left", on = "SUBJECT_ID")
+    admissions=admissions.merge(patients, how = "left", on = "SUBJECT_ID")
 
     # ICUSTAYS
     icu = icu[['HADM_ID','ICUSTAY_ID','INTIME','OUTTIME','LOS']]
-    admissions.merge(icu, how = "left", on = "HADM_ID")
+    admissions=admissions.merge(icu, how = "left", on = "HADM_ID")
 
     # SERVICES
     services = services[['HADM_ID','TRANSFERTIME','PREV_SERVICE','CURR_SERVICE']]
-    admissions.join(services, how = "left", on = "HADM_ID")
+    admissions=admissions.merge(services, how = "left", on = "HADM_ID")
 
     # TRANSFERS
     transfers = services[['HADM_ID','INTIME','OUTTIME','LOS']]
-    admissions.join(transfers, how = "left", on = "HADM_ID")
+    admissions=admissions.merge(transfers, how = "left", on = "HADM_ID")
     return admissions

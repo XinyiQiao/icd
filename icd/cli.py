@@ -30,14 +30,14 @@ def preprocess(data_dir, output):
         click.echo(f"Error: {data_dir} is not a directory")
         sys.exit(1)
     if output is None:
-        output_dir = input_dir/"output" # use default
+        output_dir = data_dir/"output" # use default
     else:
         output_dir = pathlib.Path(output)
     os.makedirs(output_dir)
 
-    admission = process(input_dir)
+    admissions = process(data_dir)
     os.chdir(output_dir)
-    df.to_csv("output.csv", index=False)
+    admissions.to_csv("output.csv", index=False)
 
 def entry_point():
     '''
