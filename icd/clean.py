@@ -43,9 +43,9 @@ def process(input_dir):
     admissions=admissions.merge(transfers, how = "left", on = "HADM_ID")
     return admissions
 
-def icd_clean(input_dir):
+def icd_clean(input_path):
     # read in data
-    df = pd.read_csv(input_dir)
+    df = pd.read_csv(input_path)
     df = df[0:10]
     df = df[['HADM_ID','SUBJECT_ID','ICD9_CODE']]
     df.sort_values(by=['HADM_ID'], inplace=True)
@@ -71,6 +71,6 @@ def icd_clean(input_dir):
             j = 2
         
         output.iloc[i,1] = row['SUBJECT_ID']
-        output.iloc[i,j]=row['ICD9_CODE']
+        output.iloc[i,j] = row['ICD9_CODE']
         j += 1
     return output
