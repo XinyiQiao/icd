@@ -34,35 +34,35 @@ def process(input_dir):
     services = pd.read_csv(input_dir/"SERVICES.csv.gz")
 
     # TRANSGERS.csv
-    transfers = pd.read_csv(input_dir/"TRANSGERS.csv.gz")
+    transfers = pd.read_csv(input_dir/"TRANSFERS.csv.gz")
 
     # admissions = pd.read_csv(input_dir/"ADMISSIONS.csv", compression = 'gzip')
 
-    # PROCSDURES_ICD
-    procedures_icd.rename(columns={"ICD9_CODE":"ICD9_Procedures"})
+    # PROCEDURES_ICD
+    procedures_icd = procedures_icd.rename(columns={"ICD9_CODE":"ICD9_Procedures"})
     procedures_icd = procedures_icd[['HADM_ID','ICD9_Procedures']]
-    admissions=admissions.merge(procedures_icd, how = "left", on="HADM_ID")
+    admissions = admissions.merge(procedures_icd, how = "left", on="HADM_ID")
 
     # DIAGNOSES_ICD
-    diagnoses_icd.rename(columns={"ICD9_CODE":"ICD9_Diagnoses"})
+    diagnoses_icd = diagnoses_icd.rename(columns={"ICD9_CODE":"ICD9_Diagnoses"})
     diagnoses_icd = diagnoses_icd[['HADM_ID','ICD9_Diagnoses']]
-    admissions=admissions.merge(diagnoses_icd, how = "left", on="HADM_ID")
+    admissions = admissions.merge(diagnoses_icd, how = "left", on="HADM_ID")
     
     # PATIENTS
     patients = patients[['SUBJECT_ID','GENDER', 'DOB','DOD','DOD_HOSP']]
-    admissions=admissions.merge(patients, how = "left", on = "SUBJECT_ID")
+    admissions = admissions.merge(patients, how = "left", on = "SUBJECT_ID")
 
     # ICUSTAYS
     icu = icu[['HADM_ID','ICUSTAY_ID','INTIME','OUTTIME','LOS']]
-    admissions=admissions.merge(icu, how = "left", on = "HADM_ID")
+    admissions = admissions.merge(icu, how = "left", on = "HADM_ID")
 
     # SERVICES
-    services = services[['HADM_ID','TRANSFERTIME','PREV_SERVICE','CURR_SERVICE']]
-    admissions=admissions.merge(services, how = "left", on = "HADM_ID")
+    # services = services[['HADM_ID','TRANSFERTIME','PREV_SERVICE','CURR_SERVICE']]
+    # admissions = admissions.merge(services, how = "left", on = "HADM_ID")
 
     # TRANSFERS
-    transfers = services[['HADM_ID','INTIME','OUTTIME','LOS']]
-    admissions=admissions.merge(transfers, how = "left", on = "HADM_ID")
+    # transfers = transfers[['HADM_ID','INTIME','OUTTIME','LOS']]
+    # admissions = admissions.merge(transfers, how = "left", on = "HADM_ID")
     return admissions
 
 def icd_clean(input_path):
