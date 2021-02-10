@@ -6,14 +6,36 @@ import pandas as pd
 import numpy as np
 
 def process(input_dir):
-    # read in data
+    # read in data and convert data types
+
+    # ADMISSIONS.csv
     admissions = pd.read_csv(input_dir/"ADMISSIONS.csv.gz")
+    admissions.ADMITTIME = pd.to_datetime(admissions.ADMITTIME)
+    admissions.DISCHTIME = pd.to_datetime(admissions.DISCHTIME)
+    admissions.DEATHTIME = pd.to_datetime(admissions.DEATHTIME)
+    
+    # PROCEDURES_ICD.csv
     procedures_icd = pd.read_csv(input_dir/"PROCEDURES_ICD.csv.gz")
+
+    # DIAGNOSES_ICD.csv
     diagnoses_icd = pd.read_csv(input_dir/"DIAGNOSES_ICD.csv.gz")
+
+    # PATIENTS.csv
     patients = pd.read_csv(input_dir/"PATIENTS.csv.gz")
+    patients.DOB = pd.to_datetime(patients.DOB)
+    patients.DOD = pd.to_datetime(patients.DOD)
+
+    # ICUSTAYS.csv
     icu = pd.read_csv(input_dir/"ICUSTAYS.csv.gz")
+    icu.INTIME = pd.to_datetime(icu.INTIME)
+    icu.OUTTIME = pd.to_datetime(icu.OUTTIME)
+
+    # SERVICES.csv
     services = pd.read_csv(input_dir/"SERVICES.csv.gz")
+
+    # TRANSGERS.csv
     transfers = pd.read_csv(input_dir/"TRANSGERS.csv.gz")
+
     # admissions = pd.read_csv(input_dir/"ADMISSIONS.csv", compression = 'gzip')
 
     # PROCSDURES_ICD
