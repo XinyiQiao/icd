@@ -1,0 +1,3 @@
+docker-compose -f dev.yml up
+docker-compose -f dev.yml run --rm icd icd 
+docker-compose -f dev.yml run --rm icd icd .data code

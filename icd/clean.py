@@ -65,10 +65,15 @@ def process(input_dir):
     admissions=admissions.merge(transfers, how = "left", on = "HADM_ID")
     return admissions
 
+def filter_age(input_path):
+    pass
+    # TODO: Left join icd.csv on patinets.csv on subject id 
+    # calculate age
+    # only filter > 18
+
 def icd_clean(input_path):
     # read in data
     df = pd.read_csv(input_path)
-    df = df[0:10]
     df = df[['HADM_ID','SUBJECT_ID','ICD9_CODE']]
     df.sort_values(by=['HADM_ID'], inplace=True)
     df.reset_index(inplace=True)
