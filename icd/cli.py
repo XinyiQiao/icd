@@ -13,7 +13,10 @@ import sys
 import os
 import pathlib
 import pandas as pd
-from .clean import icd_clean
+from .clean import (
+    icd_clean,
+    filter_age,
+)
 
 @click.group()
 @click.pass_context
@@ -40,10 +43,19 @@ def outcome(ctx):
 
 @main.command()
 @click.pass_context
-def code(ctx):
+def icdcode(ctx):
     '''icd dataframe'''
-    output = icd_clean(ctx.obj['data_dir']/"PROCEDURES_ICD.csv.gz")
-    output.to_csv(path=ctx.obj['data_dir']/"output",index=False, compression = 'zip')
+    
+    diagnoses = filter_age(ctx.obj['data_dir'],"DIAGNOSES_ICD.csv.gz")
+    diagnoses = icd_clean(diagnoses)
+    compression_opts = dict(method='zip',
+                        archive_name='out.csv')
+    diagnoses.to_csv(path_or_buf = ctx.obj['data_dir']/"output"/"diagnoses.zip" ,index=False, compression = compression_opts)
+    
+    procedures = filter_age(ctx.obj['data_dir'],"PROCEDURES_ICD.csv.gz")
+    procedures = icd_clean(procedures)
+    diagnoses.to_csv(path_or_buf = ctx.obj['data_dir']/"output"/"dignoses.zip" ,index=False, compression = compression_opts)
+    #procedures.to_csv(path_or_buf = ctx.obj['data_dir']/"output"/"procedures.csv.zip" ,index=False)
 
 
 def entry_point():

@@ -104,4 +104,4 @@ ENV/
 # mac
 /.DS_Store
 
-/.data
+/data

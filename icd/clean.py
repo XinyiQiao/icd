@@ -7,7 +7,7 @@ import numpy as np
 
 def process(input_dir):
     # read in data and convert data types
-
+    
     # ADMISSIONS.csv
     admissions = pd.read_csv(input_dir/"ADMISSIONS.csv.gz")
     admissions.ADMITTIME = pd.to_datetime(admissions.ADMITTIME)
@@ -65,15 +65,26 @@ def process(input_dir):
     admissions=admissions.merge(transfers, how = "left", on = "HADM_ID")
     return admissions
 
-def filter_age(input_path):
-    pass
-    # TODO: Left join icd.csv on patinets.csv on subject id 
-    # calculate age
-    # only filter > 18
+def filter_age(input_dir, filename):
 
-def icd_clean(input_path):
-    # read in data
-    df = pd.read_csv(input_path)
+    df = pd.read_csv(input_dir/filename)
+    df = df[['HADM_ID','SUBJECT_ID','ICD9_CODE']]
+    patients = pd.read_csv(input_dir/"PATIENTS.csv.gz")
+    patients = patients[['SUBJECT_ID','DOB']]
+    patients['DOB'] = pd.to_datetime(patients['DOB']).dt.year
+    df = df.merge(patients, how = "left", on = "SUBJECT_ID")
+
+    stays = pd.read_csv(input_dir/'ICUSTAYS.csv.gz')
+    stays = stays[['SUBJECT_ID','INTIME']]
+    stays['INTIME']=pd.to_datetime(stays['INTIME']).dt.year
+    df = df.merge(stays, how = "left", on = "SUBJECT_ID")
+    df['age']=df['INTIME']-df['DOB']
+    df=df[df['age']>=18]
+
+    return df
+
+def icd_clean(df):
+
     df = df[['HADM_ID','SUBJECT_ID','ICD9_CODE']]
     df.sort_values(by=['HADM_ID'], inplace=True)
     df.reset_index(inplace=True)
