@@ -1,15 +1,9 @@
 import pandas as pd
 
-def add_age(admissions):   
-    INTIME = pd.to_datetime(admissions.INTIME).dt.date
-    DOB = pd.to_datetime(admissions.DOB).dt.date
-    age = [pd.NaT]*len(admissions)
-    for i in range(0, len(admissions)):
-        if pd.isnull(INTIME[i])==True or pd.isnull(DOB[i])==True:
-            age[i] = pd.NaT
-        else:
-            age[i] = (INTIME[i]-DOB[i]).days // 365
-    admissions['AGE'] = pd.DataFrame(data=age)
+def add_age(admissions):
+    admissions['INTIME']= pd.to_datetime(admissions['INTIME']).dt.year
+    admissions['DOB']= pd.to_datetime(admissions['DOB']).dt.year
+    admissions['AGE']=admissions['INTIME']-admissions['DOB']
     return admissions
 '''
 def add_inhospital_mortality_to_admissions(admissions):
